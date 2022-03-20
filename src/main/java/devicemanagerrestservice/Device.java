@@ -12,9 +12,20 @@ public class Device {
 	private String name;
 	private Long creationTime;
 
+	Device(){
+		creationTime = System.currentTimeMillis();
+	}
+	
 	Device(String name, String brand){
 		this.name = name;
 		this.brand = brand;
+		creationTime = System.currentTimeMillis();
+	}
+	
+	Device(String name, String brand, Long Id){
+		this.name = name;
+		this.brand = brand;
+		this.id = Id;
 		creationTime = System.currentTimeMillis();
 	}
 	
