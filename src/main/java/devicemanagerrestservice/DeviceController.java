@@ -3,6 +3,7 @@ package devicemanagerrestservice;
 import java.util.List;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,11 +35,11 @@ public class DeviceController {
 	    return repository.findById(id).orElseThrow(() -> new DeviceNotFoundException(id));
 	  }
 	  
-	  //List all devices
+	 /** //List all devices
 	  @GetMapping("/devices")
 	  List<Device> getAllDevices() {
 	    return repository.findAll();
-	  }
+	  }**/
 	  
 	  //Update device
 	  @PutMapping("/devices/{id}")
@@ -56,6 +57,19 @@ public class DeviceController {
 	      });
 	  }
 	  
+	  @PatchMapping("/devices/{id}")
+	  Device patchDevice( @PathVariable Long id, @RequestParam String brand, @RequestParam String name) {
+		  return repository.findById(id)
+			      .map(device -> {
+			    	  if(brand != null)
+			    		  device.setBrand(brand);
+			    	  if(name != null)
+			    		  device.setName(name);
+			        return repository.save(device);
+			      })
+			      .orElseThrow(() -> new DeviceNotFoundException(id));		  
+	  }
+
 	  //Delete device
 	  @DeleteMapping("/devices/{id}")
 	  void deleteDevice(@PathVariable Long id) {
@@ -63,8 +77,9 @@ public class DeviceController {
 	  }
 	  
 	  //List all devices by brand
-	  @GetMapping("/devices/brand")
-	  List<Device> getDevicesByBrand(@RequestParam String brand) {			  
-	    return repository.findByBrand(brand);
-	  }
+	  @GetMapping("/devices")
+	  List<Device> getDevicesByBrand(@RequestParam String brand, @RequestParam String name) {		 
+		  return repository.findByBrandIgnoreCaseOrNameIgnoreCaseContaining(brand, name);
+
+	  }  
 }

@@ -9,4 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DeviceRepository extends JpaRepository<Device, Long>{
 	List<Device> findByBrand(String brand);
+	
+	List<Device> findByBrandIgnoreCaseOrNameIgnoreCaseContaining(String brand, String name);
+	
 }
